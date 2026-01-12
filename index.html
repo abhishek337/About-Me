@@ -113,7 +113,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(5, 5, 8, 0.9);
+            background: rgba(5, 5, 8, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
             border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -276,7 +276,7 @@
                 box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
             }
 
-        /* --- 6. VIDEO PLAYER --- */
+        /* --- 6. VIDEO PLAYER (FIXED FOR MOBILE) --- */
         .video-wrapper {
             width: 100%;
             max-width: 900px;
@@ -288,12 +288,14 @@
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
         }
 
+        /* Decoration (Pointer Events None allows clicking through to video) */
         .hud-corner {
             position: absolute;
             width: 30px;
             height: 30px;
             border: 3px solid var(--secondary-accent);
             transition: 0.3s;
+            pointer-events: none;
         }
 
         .hud-top-left {
@@ -339,6 +341,7 @@
             font-family: var(--font-tech);
             font-size: 0.8rem;
             color: var(--secondary-accent);
+            pointer-events: none; /* Allows clicking video if header overlaps */
         }
 
         .blink-rec {
@@ -351,12 +354,17 @@
             position: relative;
             overflow: hidden;
             width: 100%;
-            aspect-ratio: 16/9;
+            /* Enforce 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
+            height: 0;
             background: black;
         }
 
-        /* IFRAME STYLE for Google Drive */
+        /* IFRAME STYLE for Google Drive - Absolute positioning to fill container */
         iframe.drive-video {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             border: none;
@@ -387,6 +395,7 @@
                 font-family: var(--font-tech);
             }
 
+        /* Responsive Grid for Skills */
         .skill-primary-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -649,7 +658,12 @@
             border-top: 1px solid rgba(255,255,255,0.05);
         }
 
+        /* --- 9. MOBILE RESPONSIVE TWEAKS --- */
         @media (max-width: 768px) {
+            section {
+                padding: 80px 5%;
+            }
+            /* Reduced Padding */
             nav {
                 padding: 15px 20px;
             }
@@ -658,6 +672,7 @@
                 display: block;
             }
 
+            /* Mobile Nav */
             .nav-links {
                 position: absolute;
                 top: 60px;
@@ -666,23 +681,55 @@
                 background: #050508;
                 flex-direction: column;
                 align-items: center;
-                padding: 20px 0;
+                padding: 30px 0;
                 border-bottom: 1px solid var(--accent-color);
                 display: none;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             }
 
                 .nav-links.active {
                     display: flex;
                 }
 
+                .nav-links a {
+                    font-size: 1.1rem;
+                    margin: 10px 0;
+                }
+
+            /* Hero Font Size */
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            /* Skill Cards Mobile */
+            .skill-card {
+                padding: 25px 20px;
+            }
+            /* Less padding */
+            .skill-primary-list {
+                grid-template-columns: 1fr;
+            }
+            /* Stack Skills */
             .skill-secondary-row {
                 flex-direction: column;
                 gap: 30px;
             }
 
-            .hero h1 {
-                font-size: 2.8rem;
+            .skill-secondary-col {
+                min-width: auto;
             }
+
+            /* Resume Preview Mobile */
+            .resume-preview-container {
+                transform: none;
+                width: 90%;
+                aspect-ratio: auto;
+                min-height: 400px;
+            }
+
+                .resume-preview-container:hover {
+                    transform: none;
+                }
         }
 
         .hidden {
@@ -738,15 +785,18 @@
             <div class="hud-corner hud-top-right"></div>
             <div class="hud-corner hud-bottom-left"></div>
             <div class="hud-corner hud-bottom-right"></div>
+
             <div class="video-header">
                 <span>SYSTEM: PLAYBACK_MODULE_V2</span>
                 <span class="blink-rec">● REC</span>
             </div>
+
             <div class="video-content">
                 <iframe id="game-video"
                         class="drive-video"
                         src="https://drive.google.com/file/d/1JLFp1LZuVqsGm0hPJ27zmSk11tmbQWkf/preview"
-                        allow="autoplay">
+                        allow="autoplay; fullscreen"
+                        allowfullscreen>
                 </iframe>
             </div>
         </div>
@@ -794,7 +844,6 @@
             <div class="skill-divider-horiz"></div>
 
             <div class="skill-secondary-row">
-
                 <div class="skill-secondary-col">
                     <h4>Godot Engine</h4>
                     <ul class="skill-secondary-list">
@@ -814,7 +863,6 @@
                         <li><i class="fas fa-tools"></i> Level Design</li>
                     </ul>
                 </div>
-
             </div>
         </div>
     </section>
